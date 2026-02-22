@@ -1,6 +1,6 @@
 # react-testing-best-practices
 
-> Part of [`rutpshah/skills`](https://github.com/rutpshah/skills-react-testing-best-practices) — a collection of [skills.sh](https://skills.sh) skills for React development.
+> Part of [`rutpshah/skills`](https://github.com/rutpshah/skills) — a collection of [skills.sh](https://skills.sh) skills for React development.
 
 Teaches your AI agent React testing best practices using **React Testing Library**, **Vitest**, **Jest**, and **MSW**. No more hallucinated test patterns or outdated enzyme-style code.
 
@@ -17,7 +17,6 @@ Teaches your AI agent React testing best practices using **React Testing Library
 - ✅ File/folder organization conventions
 
 Advanced patterns (in `references/testing-patterns.md`):
-
 - Snapshot testing guidance
 - React Router navigation testing
 - TanStack Query / React Query testing
@@ -25,11 +24,15 @@ Advanced patterns (in `references/testing-patterns.md`):
 - Visual regression with Playwright
 - CI/GitHub Actions setup
 
+## Security
+
+> ✅ **This skill contains documentation only.** No shell scripts, network requests, or file system operations are executed. It is safe to inspect — the entire skill is human-readable Markdown.
+
 ## Installation
 
 ```bash
 # Via skills.sh CLI
-npx skills add rutpshah/skills@<react-testing-best-practices>
+npx skills add rutpshah/skills@react-testing-best-practices
 
 # Or manually — copy this folder into your agent's skills directory
 # Claude Code: ~/.claude/skills/
@@ -51,7 +54,7 @@ The skill will automatically guide the agent to follow RTL best practices.
 ## Structure
 
 ```
-skills/
+skills/                                          ← GitHub repo (rutpshah/skills)
 └── react-testing-best-practices/
     ├── SKILL.md                    # Core skill instructions (loaded by agent)
     ├── references/
@@ -61,14 +64,13 @@ skills/
 
 ## Contributing
 
-1. Fork [`rutpshah/skills`](https://github.com/rutpshah/skills-react-testing-best-practices)
+1. Fork [`rutpshah/skills`](https://github.com/rutpshah/skills)
 2. Edit `SKILL.md` or add files to `references/`
 3. Keep `SKILL.md` under 500 lines — move verbose content to `references/`
 4. Test your changes by installing locally and running against real components
 5. Open a PR with a description of what pattern you added/fixed
 
 ### Ideas for contributions
-
 - Storybook interaction testing patterns
 - Zustand store testing
 - React Server Component testing (Next.js App Router)

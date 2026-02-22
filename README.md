@@ -5,7 +5,7 @@
 ## Install a Skill
 
 ```bash
-npx skills add rutpshah/skills@<react-testing-best-practices>
+npx skills add rutpshah/skills@react-testing-best-practices
 ```
 
 Works with Claude Code, Cursor, GitHub Copilot, Aider, and more.
@@ -14,9 +14,9 @@ Works with Claude Code, Cursor, GitHub Copilot, Aider, and more.
 
 ## Available Skills
 
-| Skill                                                             | Description                                                                | Installs                                                                                                                                                                                                                           |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`react-testing-best-practices`](./react-testing-best-practices/) | RTL, Vitest, Jest, MSW — test React components, hooks, forms & async flows | [![installs](https://img.shields.io/badge/dynamic/json?url=https://skills.sh/api/installs/rutpshah/skills@react-testing-best-practices&label=installs&color=blue)](https://skills.sh/rutpshah/skills/react-testing-best-practices) |
+| Skill                                                             | Description                                                                |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`react-testing-best-practices`](./react-testing-best-practices/) | RTL, Vitest, Jest, MSW — test React components, hooks, forms & async flows |
 
 ### Coming Soon
 
