@@ -1,6 +1,11 @@
 ---
 name: react-testing-best-practices
 description: React testing best practices using React Testing Library, Vitest, and Jest. Use when writing, reviewing, or generating tests for React components, hooks, context providers, async interactions, or form submissions. Triggers on tasks like "write a test for this component", "add unit tests", "test this hook", "mock this API call", "improve test coverage", or "set up Vitest".
+
+license: MIT
+metadata:
+  author: rutpshah
+  version: "1.0"
 ---
 
 # React Testing Best Practices
@@ -19,6 +24,7 @@ Test behavior, not implementation. Users interact with the DOM — tests should 
 ## Setup
 
 ### Vitest + RTL (recommended for Vite projects)
+
 ```bash
 npm install -D vitest @testing-library/react @testing-library/user-event @testing-library/jest-dom jsdom
 ```
@@ -27,17 +33,18 @@ npm install -D vitest @testing-library/react @testing-library/user-event @testin
 // vite.config.ts
 export default defineConfig({
   test: {
-    environment: 'jsdom',
+    environment: "jsdom",
     globals: true,
-    setupFiles: './src/test/setup.ts',
+    setupFiles: "./src/test/setup.ts",
   },
-})
+});
 
 // src/test/setup.ts
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 ```
 
 ### Jest + RTL (for Create React App / Next.js)
+
 ```bash
 npm install -D @testing-library/react @testing-library/user-event @testing-library/jest-dom
 ```
@@ -45,9 +52,9 @@ npm install -D @testing-library/react @testing-library/user-event @testing-libra
 ```js
 // jest.config.js
 module.exports = {
-  testEnvironment: 'jsdom',
-  setupFilesAfterFramework: ['@testing-library/jest-dom'],
-}
+  testEnvironment: "jsdom",
+  setupFilesAfterFramework: ["@testing-library/jest-dom"],
+};
 ```
 
 ---
@@ -69,26 +76,26 @@ Always prefer in this order:
 ## Component Testing
 
 ```tsx
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { Button } from './Button'
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Button } from "./Button";
 
-describe('Button', () => {
-  it('calls onClick when clicked', async () => {
-    const user = userEvent.setup()
-    const handleClick = vi.fn()
+describe("Button", () => {
+  it("calls onClick when clicked", async () => {
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
 
-    render(<Button onClick={handleClick}>Submit</Button>)
-    await user.click(screen.getByRole('button', { name: /submit/i }))
+    render(<Button onClick={handleClick}>Submit</Button>);
+    await user.click(screen.getByRole("button", { name: /submit/i }));
 
-    expect(handleClick).toHaveBeenCalledOnce()
-  })
+    expect(handleClick).toHaveBeenCalledOnce();
+  });
 
-  it('is disabled when loading', () => {
-    render(<Button loading>Submit</Button>)
-    expect(screen.getByRole('button')).toBeDisabled()
-  })
-})
+  it("is disabled when loading", () => {
+    render(<Button loading>Submit</Button>);
+    expect(screen.getByRole("button")).toBeDisabled();
+  });
+});
 ```
 
 ---
@@ -96,21 +103,21 @@ describe('Button', () => {
 ## Form Testing
 
 ```tsx
-it('submits the form with user input', async () => {
-  const user = userEvent.setup()
-  const handleSubmit = vi.fn()
+it("submits the form with user input", async () => {
+  const user = userEvent.setup();
+  const handleSubmit = vi.fn();
 
-  render(<LoginForm onSubmit={handleSubmit} />)
+  render(<LoginForm onSubmit={handleSubmit} />);
 
-  await user.type(screen.getByLabelText(/email/i), 'user@example.com')
-  await user.type(screen.getByLabelText(/password/i), 'secret123')
-  await user.click(screen.getByRole('button', { name: /log in/i }))
+  await user.type(screen.getByLabelText(/email/i), "user@example.com");
+  await user.type(screen.getByLabelText(/password/i), "secret123");
+  await user.click(screen.getByRole("button", { name: /log in/i }));
 
   expect(handleSubmit).toHaveBeenCalledWith({
-    email: 'user@example.com',
-    password: 'secret123',
-  })
-})
+    email: "user@example.com",
+    password: "secret123",
+  });
+});
 ```
 
 ---
@@ -120,36 +127,34 @@ it('submits the form with user input', async () => {
 Use `waitFor` or `findBy*` for async state changes. Always mock `fetch` or `axios` at the module level.
 
 ```tsx
-import { http, HttpResponse } from 'msw'
-import { setupServer } from 'msw/node'
+import { http, HttpResponse } from "msw";
+import { setupServer } from "msw/node";
 
 const server = setupServer(
-  http.get('/api/users', () => {
-    return HttpResponse.json([{ id: 1, name: 'Alice' }])
-  })
-)
+  http.get("/api/users", () => {
+    return HttpResponse.json([{ id: 1, name: "Alice" }]);
+  }),
+);
 
-beforeAll(() => server.listen())
-afterEach(() => server.resetHandlers())
-afterAll(() => server.close())
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
-it('renders users from API', async () => {
-  render(<UserList />)
+it("renders users from API", async () => {
+  render(<UserList />);
 
-  expect(screen.getByText(/loading/i)).toBeInTheDocument()
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
 
-  const user = await screen.findByText('Alice')
-  expect(user).toBeInTheDocument()
-})
+  const user = await screen.findByText("Alice");
+  expect(user).toBeInTheDocument();
+});
 
-it('shows error on API failure', async () => {
-  server.use(
-    http.get('/api/users', () => HttpResponse.error())
-  )
+it("shows error on API failure", async () => {
+  server.use(http.get("/api/users", () => HttpResponse.error()));
 
-  render(<UserList />)
-  expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument()
-})
+  render(<UserList />);
+  expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument();
+});
 ```
 
 > Prefer **MSW (Mock Service Worker)** over `vi.mock('axios')` — it intercepts at the network level, making tests more realistic.
@@ -159,24 +164,25 @@ it('shows error on API failure', async () => {
 ## Custom Hook Testing
 
 ```tsx
-import { renderHook, act } from '@testing-library/react'
-import { useCounter } from './useCounter'
+import { renderHook, act } from "@testing-library/react";
+import { useCounter } from "./useCounter";
 
-it('increments the counter', () => {
-  const { result } = renderHook(() => useCounter())
+it("increments the counter", () => {
+  const { result } = renderHook(() => useCounter());
 
   act(() => {
-    result.current.increment()
-  })
+    result.current.increment();
+  });
 
-  expect(result.current.count).toBe(1)
-})
+  expect(result.current.count).toBe(1);
+});
 ```
 
 For hooks that depend on context, wrap with a provider:
+
 ```tsx
-const wrapper = ({ children }) => <ThemeProvider>{children}</ThemeProvider>
-const { result } = renderHook(() => useTheme(), { wrapper })
+const wrapper = ({ children }) => <ThemeProvider>{children}</ThemeProvider>;
+const { result } = renderHook(() => useTheme(), { wrapper });
 ```
 
 ---
@@ -185,30 +191,31 @@ const { result } = renderHook(() => useTheme(), { wrapper })
 
 ```tsx
 const renderWithProviders = (ui, options = {}) => {
-  const { store = setupStore(), ...renderOptions } = options
+  const { store = setupStore(), ...renderOptions } = options;
 
   const Wrapper = ({ children }) => (
     <Provider store={store}>
       <ThemeProvider theme="light">{children}</ThemeProvider>
     </Provider>
-  )
+  );
 
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
-}
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+};
 
 // Usage
-it('shows user name from store', () => {
-  const store = setupStore({ user: { name: 'Alice' } })
-  renderWithProviders(<Header />, { store })
-  expect(screen.getByText('Alice')).toBeInTheDocument()
-})
+it("shows user name from store", () => {
+  const store = setupStore({ user: { name: "Alice" } });
+  renderWithProviders(<Header />, { store });
+  expect(screen.getByText("Alice")).toBeInTheDocument();
+});
 ```
 
 Extract `renderWithProviders` into `src/test/utils.tsx` and re-export from RTL:
+
 ```tsx
 // src/test/utils.tsx
-export * from '@testing-library/react'
-export { renderWithProviders as render }
+export * from "@testing-library/react";
+export { renderWithProviders as render };
 ```
 
 ---
@@ -217,18 +224,18 @@ export { renderWithProviders as render }
 
 ```tsx
 // Mock a module
-vi.mock('../utils/api', () => ({
-  fetchUser: vi.fn().mockResolvedValue({ id: 1, name: 'Alice' }),
-}))
+vi.mock("../utils/api", () => ({
+  fetchUser: vi.fn().mockResolvedValue({ id: 1, name: "Alice" }),
+}));
 
 // Mock only part of a module
-vi.mock('../utils/date', async (importOriginal) => {
-  const actual = await importOriginal()
-  return { ...actual, formatDate: vi.fn(() => 'Jan 1, 2025') }
-})
+vi.mock("../utils/date", async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, formatDate: vi.fn(() => "Jan 1, 2025") };
+});
 
 // Spy on a method
-const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+const spy = vi.spyOn(console, "error").mockImplementation(() => {});
 ```
 
 Always restore mocks: `afterEach(() => vi.restoreAllMocks())`
@@ -242,28 +249,28 @@ npm install -D jest-axe
 ```
 
 ```tsx
-import { axe, toHaveNoViolations } from 'jest-axe'
-expect.extend(toHaveNoViolations)
+import { axe, toHaveNoViolations } from "jest-axe";
+expect.extend(toHaveNoViolations);
 
-it('has no accessibility violations', async () => {
-  const { container } = render(<LoginForm />)
-  const results = await axe(container)
-  expect(results).toHaveNoViolations()
-})
+it("has no accessibility violations", async () => {
+  const { container } = render(<LoginForm />);
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
+});
 ```
 
 ---
 
 ## Common Mistakes to Avoid
 
-| ❌ Avoid | ✅ Do instead |
-|---|---|
-| `getByTestId('submit-btn')` | `getByRole('button', { name: /submit/i })` |
-| `wrapper.find(MyComponent)` | Query the DOM output directly |
-| `act()` around every interaction | `userEvent` handles `act()` internally |
-| `fireEvent.click()` | `await userEvent.click()` — more realistic |
-| Asserting internal state | Assert visible UI changes |
-| Empty `describe` blocks | Group only related tests; flat is fine |
+| ❌ Avoid                         | ✅ Do instead                              |
+| -------------------------------- | ------------------------------------------ |
+| `getByTestId('submit-btn')`      | `getByRole('button', { name: /submit/i })` |
+| `wrapper.find(MyComponent)`      | Query the DOM output directly              |
+| `act()` around every interaction | `userEvent` handles `act()` internally     |
+| `fireEvent.click()`              | `await userEvent.click()` — more realistic |
+| Asserting internal state         | Assert visible UI changes                  |
+| Empty `describe` blocks          | Group only related tests; flat is fine     |
 
 ---
 
@@ -291,6 +298,7 @@ src/
 ## Additional Patterns
 
 See `references/testing-patterns.md` for:
+
 - Snapshot testing guidance
 - Testing React Router navigation
 - Testing with React Query / TanStack Query
